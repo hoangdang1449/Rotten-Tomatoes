@@ -3,3 +3,4 @@
 //
 
 #import "UIImageView+AFNetworking.h"
+#import "UIImage+KVNImageEffects.h"
