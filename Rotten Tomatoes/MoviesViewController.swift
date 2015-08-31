@@ -12,13 +12,41 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
 
     @IBOutlet weak var tableView: UITableView!
     
+    @IBOutlet weak var NetworkError: UILabel!
+    
     var movies: [NSDictionary]?
     
     var refreshControl: UIRefreshControl!
     
     func onRefresh(){
+        // if reachable ...make requests
+        if Reachability.isConnectedToNetwork() == true {
         
-        println("Refreshed")
+        let url = NSURL(string: "https://gist.githubusercontent.com/timothy1ee/d1778ca5b944ed974db0/raw/489d812c7ceeec0ac15ab77bf7c47849f2d1eb2b/gistfile1.json")!
+        
+        let request = NSURLRequest(URL: url)
+        
+        NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
+            
+            let json = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: nil) as? NSDictionary
+            
+            if let json = json {
+                self.movies = json["movies"] as? [NSDictionary]
+                self.tableView.reloadData()
+                //self.refreshControl.endRefreshing()
+            }
+            
+        }
+        
+        tableView.dataSource = self
+        tableView.delegate = self
+        } else {
+            
+            println("Internet connection FAILED")
+            UIView.animateWithDuration(5, delay: 3, options: nil, animations: {self.NetworkError}, completion: nil)
+        }
+        
+        //This will end the pull refresh whether network is available or not
         self.refreshControl.endRefreshing()
     }
     
@@ -31,24 +59,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
         refreshControl.addTarget(self, action: "onRefresh", forControlEvents: UIControlEvents.ValueChanged)
         self.tableView.addSubview(refreshControl)
-        
-        let url = NSURL(string: "https://gist.githubusercontent.com/timothy1ee/d1778ca5b944ed974db0/raw/489d812c7ceeec0ac15ab77bf7c47849f2d1eb2b/gistfile1.json")!
-
-        let request = NSURLRequest(URL: url)
-        
-        NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
-            
-        let json = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: nil) as? NSDictionary
-            
-        if let json = json {
-                self.movies = json["movies"] as? [NSDictionary]
-                self.tableView.reloadData()
-            }
-        }
-        
-        tableView.dataSource = self
-        tableView.delegate = self
-    
+        onRefresh()
     }
 
     override func didReceiveMemoryWarning() {
@@ -83,8 +94,6 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
 
-
-    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -94,9 +103,5 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         let movie = movies![indexPath.row]
         let movieDetailsViewController = segue.destinationViewController as! MovieDetailsViewController
         movieDetailsViewController.movie = movie
-        
-        
     }
-    
-
 }
