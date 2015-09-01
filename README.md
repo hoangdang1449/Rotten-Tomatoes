@@ -16,6 +16,7 @@ Required
 [x] User can pull to refresh the movie list.
 
 Optional
+
 [ ] All images fade in.
 
 [ ] For the larger poster, load the low-res first and switch to high-res when complete.
