@@ -19,6 +19,10 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     var refreshControl: UIRefreshControl!
     
     func onRefresh(){
+        
+        // Show loading wait
+        SwiftLoader.show(title: "Loading...", animated: true)
+        
         // if reachable ...make requests
         if Reachability.isConnectedToNetwork() == true {
         
@@ -48,6 +52,9 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
         //This will end the pull refresh whether network is available or not
         self.refreshControl.endRefreshing()
+        
+        //End loading wait
+        SwiftLoader.hide()
     }
     
     override func viewDidLoad()
