@@ -3,8 +3,8 @@ This is a movies app displaying box office and top rental DVDs using the Rotten 
 
 Time spent: 12
 
-Features
-Required
+Features Required
+
 [x] User can view a list of movies. Poster images load asynchronously.
 
 [x] User can view movie details by tapping on a cell.
@@ -15,18 +15,4 @@ Required
 
 [x] User can pull to refresh the movie list.
 
-Optional
-
-[ ] All images fade in.
-
-[ ] For the larger poster, load the low-res first and switch to high-res when complete.
-
-[ ] All images should be cached in memory and disk: AppDelegate has an instance of NSURLCache and NSURLRequest makes a request with NSURLRequestReturnCacheDataElseLoad cache policy. I tested it by turning off wifi and restarting the app.
-
-[ ] Customize the highlight and selection effect of the cell.
-
-[ ] Customize the navigation bar.
-
-[ ] Add a tab bar for Box Office and DVD.
-
-[ ] Add a search bar: pretty simple implementation of searching against the existing table view data.
+![rottentomatoesgl](https://cloud.githubusercontent.com/assets/13508908/9594472/84b00ed2-5085-11e5-8a9c-42c44a22f859.gif)
